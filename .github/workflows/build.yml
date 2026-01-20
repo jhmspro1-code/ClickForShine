@@ -1,29 +1,46 @@
-name: build-flutter-final
+name: build-self-repair
 on:
   push:
     branches: [ main ]
 jobs:
-  build:
+  auto-fix-build:
     runs-on: ubuntu-latest
     steps:
-      - name: 1-clone
+      - name: 1-checkout-code
         uses: actions/checkout@v4
-      - name: 2-java
+
+      - name: 2-setup-java-17
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
           java-version: '17'
-      - name: 3-flutter
+
+      - name: 3-setup-flutter
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-      - name: 4-build
+
+      - name: 4-scan-and-repair
         run: |
-          cd clickforshine_3.0
+          # 1. Localiza a pasta raiz do projeto (onde está o pubspec.yaml)
+          PROJECT_ROOT=$(find . -name "pubspec.yaml" -exec dirname {} \;)
+          echo "Projeto encontrado em: $PROJECT_ROOT"
+          cd "$PROJECT_ROOT"
+          
+          # 2. Corrige permissões de execução de forma recursiva
+          echo "Corrigindo permissões do Gradle..."
+          find . -name "gradlew" -exec chmod 777 {} \;
+          
+          # 3. Limpa caches antigos que podem causar erro 1
+          flutter clean
           flutter pub get
+          
+          # 4. Executa o build forçado
+          echo "Iniciando compilação forçada..."
           flutter build apk --release
-      - name: 5-save
+
+      - name: 5-export-anywhere
         uses: actions/upload-artifact@v4
         with:
-          name: ClickforShine-APK
-          path: clickforshine_3.0/build/app/outputs/flutter-apk/app-release.apk
+          name: ClickforShine-AutoFixed
+          path: "**/build/app/outputs/flutter-apk/app-release.apk"
