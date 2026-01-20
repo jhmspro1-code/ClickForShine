@@ -1,0 +1,62 @@
+# Flutter
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+/build/
+/ios/Flutter/Flutter.podspec
+/ios/Flutter/Flutter.framework
+/ios/Flutter/Flutter.xcframework
+/ios/Flutter/flutter_export_environment.sh
+/ios/ServiceDefinitions.json
+/ios/Runner/GeneratedPluginRegistrant.*
+/android/app/debug
+/android/app/profile
+/android/app/release
+/android/.gradle
+/android/captures/
+/android/gradle-wrapper.jar
+/android/gradle/wrapper/gradle-wrapper.properties
+/android/local.properties
+/android/app/outputs
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+*.iml
+
+# Env
+.env
+.env.local
+firebase_options.dart
+
+# Web
+/web/
+
+# Secrets & Keys
+*.jks
+*.keystore
+*.p8
+*.p12
+*.pfx
+*.cer
+key.properties
+
+# Build outputs
+*.apk
+*.ipa
+*.app.zip
+*.aab
+
+# Firebase
+google-services.json
+GoogleService-Info.plist
+
+# Generated files
+pubspec.lock
