@@ -1,31 +1,30 @@
-build-final-shine
+name: build-final-force
 on:
   push:
     branches: [ main ]
-
 jobs:
   android-build:
     runs-on: ubuntu-latest
     steps:
       - name: 1-checkout
         uses: actions/checkout@v4
-
-      - name: 2-setup-node
+      - name: 2-node
         uses: actions/setup-node@v4
         with:
           node-version: 18
-
-      - name: 3-build-process
+      - name: 3-force-build
         run: |
           cd clickforshine_3.0
           npm install --legacy-peer-deps
           npx expo prebuild --platform android --yes --no-interactive
-          cd android
+          # O segredo hacker: buscar o gradlew onde quer que ele esteja
+          GRADLE_PATH=$(find . -name gradlew)
+          GRADLE_DIR=$(dirname "$GRADLE_PATH")
+          cd "$GRADLE_DIR"
           chmod +x gradlew
           ./gradlew assembleRelease --no-daemon
-
-      - name: 4-upload-apk
+      - name: 4-upload
         uses: actions/upload-artifact@v4
         with:
-          name: ClickforShine-Installer
-          path: clickforshine_3.0/android/app/build/outputs/apk/release/*.apk
+          name: ClickforShine-App
+          path: "*/release/.apk"
